@@ -28,13 +28,15 @@ void ATankPlayerController::AimTowardsCrosshair()
 
 bool ATankPlayerController::GetSightRayHitLocation(FVector &OutHitLocation) const
 {
-	//raycast from camera through crosshair
-		//get camera location
 	auto ControlledTank = GetControlledTank();
-	FVector Start = PlayerCameraManager->GetTargetLocation();
-	FVector End = PlayerCameraManager->GetActorForwardVector();
-	End = End.RotateAngleAxis(8.0f, FVector(0.0f, 1.0f, 0.0f));
-	End = End * 1000;
+	APlayerCameraManager* CameraManager = PlayerCameraManager;
+	FVector Start = CameraManager->GetCameraLocation();
+	FVector End = CameraManager->GetActorForwardVector() * 75000;
+	End = Start + End;
+	UE_LOG(LogTemp, Warning, TEXT("End vector is: %s"), *End.ToString());
+	FRotator Adjustment = FRotator(8.0f, 0.0f, 0.0f);
+	End = Adjustment.RotateVector(End);
+
 	DrawDebugLine(
 		GetWorld(),
 		Start,
@@ -43,10 +45,8 @@ bool ATankPlayerController::GetSightRayHitLocation(FVector &OutHitLocation) cons
 		false, -1, 0,
 		12.333
 	);
+
 	return true;
-		//get crosshair location
-			//crosshair is always 2/3rd from the bottom of the screen
-			//angle is... 8 degrees
 }
 
 void ATankPlayerController::BeginPlay()
