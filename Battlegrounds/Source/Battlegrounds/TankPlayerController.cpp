@@ -1,6 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "TankPlayerController.h"
+#include "Engine/World.h"
 #include "DrawDebugHelpers.h"
 #include "Battlegrounds.h"
 
@@ -22,31 +23,36 @@ void ATankPlayerController::AimTowardsCrosshair()
 {
 	if (!GetControlledTank()) { return; }
 
-	FVector HitLocation;/// Out Parameters
-	GetSightRayHitLocation(HitLocation);
+	FVector OutHitLocation;/// Out parameter
+	if (GetSightRayHitLocation(OutHitLocation))
+		GetControlledTank()->AimAt(OutHitLocation);
 }
 
-bool ATankPlayerController::GetSightRayHitLocation(FVector &OutHitLocation) const
+bool ATankPlayerController::GetSightRayHitLocation(FVector& OutHitLocation) const
 {
-	auto ControlledTank = GetControlledTank();
-	APlayerCameraManager* CameraManager = PlayerCameraManager;
-	FVector Start = CameraManager->GetCameraLocation();
-	FVector End = CameraManager->GetActorForwardVector() * 75000;
-	End = Start + End;
-	UE_LOG(LogTemp, Warning, TEXT("End vector is: %s"), *End.ToString());
-	FRotator Adjustment = FRotator(8.0f, 0.0f, 0.0f);
-	End = Adjustment.RotateVector(End);
+	int32 ViewportSizeX, ViewportSizeY;
+	GetViewportSize(ViewportSizeX, ViewportSizeY);
+	FVector2D ScreenLocation = FVector2D(ViewportSizeX * CrosshairXLocation, ViewportSizeY * CrosshairYLocation);
 
-	DrawDebugLine(
-		GetWorld(),
-		Start,
-		End,
-		FColor(255, 0, 0),
-		false, -1, 0,
-		12.333
-	);
+	FVector TraceDirectionVector, TraceStartLocation, TraceEndLocation;
 
-	return true;
+	if (GetLookDirection(ScreenLocation, TraceStartLocation, TraceDirectionVector))
+	{
+		TraceEndLocation = (TraceDirectionVector * LineTraceRange) + TraceStartLocation;
+		FHitResult OutHit;
+		if (GetWorld()->LineTraceSingleByChannel(OutHit, TraceStartLocation, TraceEndLocation, ECC_Visibility))
+		{
+			OutHitLocation = OutHit.Location;
+			return true;
+		}
+	}
+	OutHitLocation = FVector(0.0f);
+	return false;
+}
+
+bool ATankPlayerController::GetLookDirection(FVector2D& ScreenLocation, FVector& CameraPosition, FVector& OutHitLocation) const
+{
+	return DeprojectScreenPositionToWorld(ScreenLocation.X, ScreenLocation.Y, CameraPosition, OutHitLocation);
 }
 
 void ATankPlayerController::BeginPlay()

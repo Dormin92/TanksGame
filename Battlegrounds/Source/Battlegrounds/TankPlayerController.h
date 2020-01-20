@@ -15,16 +15,26 @@ class BATTLEGROUNDS_API ATankPlayerController : public APlayerController
 {
 	GENERATED_BODY()
 
+private:
+	UPROPERTY(EditAnywhere)
+	float CrosshairXLocation = 0.5;
 
-public:
+	UPROPERTY(EditAnywhere)
+	float CrosshairYLocation = 0.33333;
+
+	UPROPERTY(EditAnywhere)
+	float LineTraceRange = 1000000.0;
+
 	ATank* GetControlledTank() const;
-
-	virtual void Tick(float DeltaSeconds) override;
 
 	void AimTowardsCrosshair();
 
 	bool GetSightRayHitLocation(FVector& OutHitLocation) const;
 
+	bool GetLookDirection(FVector2D& ScreenLocation, FVector& CameraPosition, FVector& OutHitLocation) const;
+
+public:
+	virtual void Tick(float DeltaSeconds) override;
 	virtual void BeginPlay() override;
 };
 
