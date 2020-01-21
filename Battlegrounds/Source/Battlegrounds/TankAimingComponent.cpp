@@ -2,6 +2,7 @@
 
 
 #include "TankAimingComponent.h"
+#include "GameFramework/Actor.h"
 
 // Sets default values for this component's properties
 UTankAimingComponent::UTankAimingComponent()
@@ -18,6 +19,12 @@ void UTankAimingComponent::BeginPlay()
 {
 	Super::BeginPlay();
 	
+}
+
+void UTankAimingComponent::AimLogging(FVector HitLocation)
+{
+	auto ThisTank = GetOwner()->GetName();
+	UE_LOG(LogTemp, Warning, TEXT("Tank %s is aiming at %s."), *ThisTank, *HitLocation.ToString())
 }
 
 

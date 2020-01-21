@@ -15,6 +15,7 @@ class BATTLEGROUNDS_API UTankAimingComponent : public UActorComponent
 public:	
 	// Sets default values for this component's properties
 	UTankAimingComponent();
+	void AimLogging(FVector HitLocation);
 
 protected:
 	// Called when the game starts
