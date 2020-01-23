@@ -2,6 +2,9 @@
 
 
 #include "TankAimingComponent.h"
+#include "Components/StaticMeshComponent.h"
+#include "Kismet/GameplayStatics.h"
+#include "TankBarrel.h"
 #include "GameFramework/Actor.h"
 
 // Sets default values for this component's properties
@@ -14,17 +17,46 @@ UTankAimingComponent::UTankAimingComponent()
 }
 
 
+void UTankAimingComponent::SetBarrelReference(UTankBarrel* BarrelToSet)
+{
+	Barrel = BarrelToSet;
+}
+
+
 // Called when the game starts
 void UTankAimingComponent::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
 }
 
-void UTankAimingComponent::AimLogging(FVector HitLocation)
+void UTankAimingComponent::AimLogging(FVector HitLocation, float LaunchSpeed)
 {
-	auto ThisTank = GetOwner()->GetName();
-	UE_LOG(LogTemp, Warning, TEXT("Tank %s is aiming at %s."), *ThisTank, *HitLocation.ToString())
+	if (!Barrel) { UE_LOG(LogTemp, Warning, TEXT("Barrel not found!!"));  return; }
+	auto TargetLocation = HitLocation;
+
+	FVector OutLaunchVelocity(0);
+	FVector StartLocation = Barrel->GetSocketLocation(FName("FireLocation"));
+
+
+	bool bHaveAimSolution = UGameplayStatics::SuggestProjectileVelocity(this, OutLaunchVelocity, StartLocation, TargetLocation, LaunchSpeed, ESuggestProjVelocityTraceOption::DoNotTrace);
+	if (bHaveAimSolution)
+	{
+		auto AimDirection = OutLaunchVelocity.GetSafeNormal();
+		MoveBarrelTowards(AimDirection);
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Aim Solution failed!!"));
+	}
+}
+
+void UTankAimingComponent::MoveBarrelTowards(FVector AimDirection)
+{
+	auto BarrelRotator = Barrel->GetForwardVector().Rotation();
+	auto AimAsRotator = AimDirection.Rotation();
+	auto DeltaRotator = AimAsRotator - BarrelRotator;
+	Barrel->Elevate(5.0f); //TODO remove magic number
 }
 
 
