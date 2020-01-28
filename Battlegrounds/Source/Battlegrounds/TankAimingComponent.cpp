@@ -12,8 +12,6 @@ UTankAimingComponent::UTankAimingComponent()
 {
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	PrimaryComponentTick.bCanEverTick = true;
-
-
 }
 
 
@@ -37,17 +35,17 @@ void UTankAimingComponent::AimLogging(FVector HitLocation, float LaunchSpeed)
 
 	FVector OutLaunchVelocity(0);
 	FVector StartLocation = Barrel->GetSocketLocation(FName("FireLocation"));
+	auto ThisTank = GetOwner()->GetName();
 
-
-	bool bHaveAimSolution = UGameplayStatics::SuggestProjectileVelocity(this, OutLaunchVelocity, StartLocation, TargetLocation, LaunchSpeed, ESuggestProjVelocityTraceOption::DoNotTrace);
-	if (bHaveAimSolution)
+	bool BHaveAimSolution = UGameplayStatics::SuggestProjectileVelocity(this, OutLaunchVelocity, StartLocation, TargetLocation, LaunchSpeed, false, 0.0f, 0.0f, ESuggestProjVelocityTraceOption::DoNotTrace);
+	if (BHaveAimSolution)
 	{
 		auto AimDirection = OutLaunchVelocity.GetSafeNormal();
 		MoveBarrelTowards(AimDirection);
 	}
 	else
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Aim Solution failed!!"));
+		UE_LOG(LogTemp, Warning, TEXT("Aim solution NOT found by %s!"), *ThisTank);
 	}
 }
 
