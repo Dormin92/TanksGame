@@ -8,6 +8,7 @@
 #include "Tank.generated.h"
 
 class UTankBarrel;
+class UTankTurret;
 
 UCLASS()
 class BATTLEGROUNDS_API ATank : public APawn
@@ -32,5 +33,7 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = Setup) //Called by blueprint to assign barrel
 	void SetBarrelReference(UTankBarrel* BarrelToSet);
+	UFUNCTION(BlueprintCallable, Category = Setup) //Called by blueprint to assign turret
+		void SetTurretReference(UTankTurret* TurretToSet);
 
 };
