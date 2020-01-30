@@ -46,15 +46,11 @@ void UTankAimingComponent::AimLogging(FVector HitLocation, float LaunchSpeed)
 	auto ThisTank = GetOwner()->GetName();
 
 	bool BHaveAimSolution = UGameplayStatics::SuggestProjectileVelocity(this, OutLaunchVelocity, StartLocation, TargetLocation, LaunchSpeed, false, 0.0f, 0.0f, ESuggestProjVelocityTraceOption::DoNotTrace);
-	if (BHaveAimSolution)
-	{
-		auto AimDirection = OutLaunchVelocity.GetSafeNormal();
-		MoveBarrelTowards(AimDirection);
-	}
-	else
-	{
-		UE_LOG(LogTemp, Warning, TEXT("Aim solution NOT found by %s!"), *ThisTank);
-	}
+	
+	if (!BHaveAimSolution) { UE_LOG(LogTemp, Warning, TEXT("Aim solution NOT found by %s!"), *ThisTank); return; }
+
+	auto AimDirection = OutLaunchVelocity.GetSafeNormal();
+	MoveBarrelTowards(AimDirection);
 }
 
 void UTankAimingComponent::MoveBarrelTowards(FVector AimDirection)
@@ -65,8 +61,6 @@ void UTankAimingComponent::MoveBarrelTowards(FVector AimDirection)
 	auto DeltaRotator = AimAsRotator - BarrelRotator;
 	Barrel->Elevate(DeltaRotator.Pitch);
 
-	auto TurretRotator = Turret->GetForwardVector().Rotation();
-	DeltaRotator = AimAsRotator - TurretRotator;
 	Turret->Yaw(DeltaRotator.Yaw);
 }
 

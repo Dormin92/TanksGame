@@ -34,6 +34,8 @@ public:
 	UFUNCTION(BlueprintCallable, Category = Setup) //Called by blueprint to assign barrel
 	void SetBarrelReference(UTankBarrel* BarrelToSet);
 	UFUNCTION(BlueprintCallable, Category = Setup) //Called by blueprint to assign turret
-		void SetTurretReference(UTankTurret* TurretToSet);
+	void SetTurretReference(UTankTurret* TurretToSet);
+	UFUNCTION(BlueprintCallable, Category = Controls)
+	void Fire();
 
 };
