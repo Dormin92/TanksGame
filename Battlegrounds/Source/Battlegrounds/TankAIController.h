@@ -14,9 +14,9 @@ UCLASS()
 class BATTLEGROUNDS_API ATankAIController : public AAIController
 {
 	GENERATED_BODY()
-	
 
-public:
+private:
 	void BeginPlay() override;
 	void Tick(float DeltaSeconds) override;
+	float AcceptanceRadius = 300;
 };

@@ -38,7 +38,7 @@ void UTankAimingComponent::BeginPlay()
 
 void UTankAimingComponent::AimLogging(FVector HitLocation, float LaunchSpeed)
 {
-	if (!Barrel) { UE_LOG(LogTemp, Warning, TEXT("Barrel not found!!"));  return; }
+	if (!Barrel) { return; }
 	auto TargetLocation = HitLocation;
 
 	FVector OutLaunchVelocity(0);
@@ -47,7 +47,7 @@ void UTankAimingComponent::AimLogging(FVector HitLocation, float LaunchSpeed)
 
 	bool BHaveAimSolution = UGameplayStatics::SuggestProjectileVelocity(this, OutLaunchVelocity, StartLocation, TargetLocation, LaunchSpeed, false, 0.0f, 0.0f, ESuggestProjVelocityTraceOption::DoNotTrace);
 	
-	if (!BHaveAimSolution) { UE_LOG(LogTemp, Warning, TEXT("Aim solution NOT found by %s!"), *ThisTank); return; }
+	if (!BHaveAimSolution) { return; }
 
 	auto AimDirection = OutLaunchVelocity.GetSafeNormal();
 	MoveBarrelTowards(AimDirection);

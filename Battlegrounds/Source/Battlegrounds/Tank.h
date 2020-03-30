@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
 #include "TankAimingComponent.h"
+#include "TankMovementComponent.h"
 #include "Tank.generated.h"
 
 class UTankBarrel;
@@ -33,6 +34,9 @@ private:
 
 protected:
 	UTankAimingComponent* TankAimingComponent = nullptr;
+
+	UPROPERTY(BlueprintReadOnly)
+	UTankMovementComponent* TankMovementComponent = nullptr;
 
 public:	
 	ATank();
