@@ -15,6 +15,10 @@ class BATTLEGROUNDS_API ATankPlayerController : public APlayerController
 {
 	GENERATED_BODY()
 
+protected:
+	UFUNCTION(BlueprintCallable, Category = "Setup")
+	ATank* GetControlledTank() const;
+
 private:
 	UPROPERTY(EditDefaultsOnly)
 	float CrosshairXLocation = 0.5;
@@ -24,8 +28,6 @@ private:
 
 	UPROPERTY(EditDefaultsOnly)
 	float LineTraceRange = 1000000.0;
-
-	ATank* GetControlledTank() const;
 
 	void AimTowardsCrosshair();
 

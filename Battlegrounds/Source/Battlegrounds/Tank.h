@@ -33,24 +33,16 @@ private:
 	double LastFireTime = 0;
 
 protected:
+	UPROPERTY(BlueprintReadOnly)
 	UTankAimingComponent* TankAimingComponent = nullptr;
 
 	UPROPERTY(BlueprintReadOnly)
 	UTankMovementComponent* TankMovementComponent = nullptr;
 
 public:	
-	ATank();
-
-	virtual void BeginPlay() override;
-
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-	
+	ATank();	
 	void AimAt(FVector HitLocation);
 
-	UFUNCTION(BlueprintCallable, Category = Setup) //Called by blueprint to assign barrel
-	void SetBarrelReference(UTankBarrel* BarrelToSet);
-	UFUNCTION(BlueprintCallable, Category = Setup) //Called by blueprint to assign turret
-	void SetTurretReference(UTankTurret* TurretToSet);
 	UFUNCTION(BlueprintCallable, Category = Controls)
 	void Fire();
 
