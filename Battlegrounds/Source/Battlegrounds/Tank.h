@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
-#include "TankAimingComponent.h"
 #include "Tank.generated.h"
 
 class UTankBarrel;
@@ -31,13 +30,8 @@ private:
 
 	double LastFireTime = 0;
 
-protected:
-	UPROPERTY(BlueprintReadOnly)
-	UTankAimingComponent* TankAimingComponent = nullptr;
-
 public:	
 	ATank();	
-	void AimAt(FVector HitLocation);
 
 	virtual void BeginPlay() override;
 

@@ -4,6 +4,7 @@
 #include "TankAIController.h"
 #include "TankPlayerController.h"
 #include "Battlegrounds.h"
+#include "TankAimingComponent.h"
 #include "Engine/World.h"
 
 void ATankAIController::BeginPlay()
@@ -14,13 +15,15 @@ void ATankAIController::BeginPlay()
 void ATankAIController::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
-	auto ThisAITank = Cast<ATank>(GetPawn());
-	auto PlayerTank = Cast<ATank>(GetWorld()->GetFirstPlayerController()->GetPawn());
+	auto AimingComponent = GetPawn()->FindComponentByClass<UTankAimingComponent>();
+	auto PlayerTank = GetWorld()->GetFirstPlayerController()->GetPawn();
 
 	if (ensure(PlayerTank))
 	{
 		MoveToActor(PlayerTank, AcceptanceRadius);
-		ThisAITank->AimAt(PlayerTank->GetActorLocation());
-		ThisAITank->Fire();
+		AimingComponent->AimAt(PlayerTank->GetActorLocation());
+		
+		//TODO Fix Firing
+		//ThisAITank->Fire();
 	}
 }
