@@ -5,7 +5,6 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
 #include "TankAimingComponent.h"
-#include "TankMovementComponent.h"
 #include "Tank.generated.h"
 
 class UTankBarrel;
@@ -36,12 +35,11 @@ protected:
 	UPROPERTY(BlueprintReadOnly)
 	UTankAimingComponent* TankAimingComponent = nullptr;
 
-	UPROPERTY(BlueprintReadOnly)
-	UTankMovementComponent* TankMovementComponent = nullptr;
-
 public:	
 	ATank();	
 	void AimAt(FVector HitLocation);
+
+	virtual void BeginPlay() override;
 
 	UFUNCTION(BlueprintCallable, Category = Controls)
 	void Fire();
