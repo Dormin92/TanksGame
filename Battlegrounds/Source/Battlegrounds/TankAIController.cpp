@@ -17,13 +17,13 @@ void ATankAIController::Tick(float DeltaSeconds)
 	Super::Tick(DeltaSeconds);
 	auto AimingComponent = GetPawn()->FindComponentByClass<UTankAimingComponent>();
 	auto PlayerTank = GetWorld()->GetFirstPlayerController()->GetPawn();
-
 	if (ensure(PlayerTank))
 	{
+		UE_LOG(LogTemp, Warning, TEXT("PlayerTank Found"));
 		MoveToActor(PlayerTank, AcceptanceRadius);
 		AimingComponent->AimAt(PlayerTank->GetActorLocation());
 		
-		//TODO Fix Firing
-		//ThisAITank->Fire();
+		AimingComponent->Fire();
 	}
+	else{ UE_LOG(LogTemp, Warning, TEXT("PlayerTank NOT found")); }
 }

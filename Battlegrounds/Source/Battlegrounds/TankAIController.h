@@ -17,5 +17,5 @@ class BATTLEGROUNDS_API ATankAIController : public AAIController
 private:
 	void BeginPlay() override;
 	void Tick(float DeltaSeconds) override;
-	float AcceptanceRadius = 300;
+	float AcceptanceRadius = 3000;
 };
