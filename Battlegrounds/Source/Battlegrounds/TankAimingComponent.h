@@ -12,7 +12,8 @@ enum class EFiringStatus : uint8
 {
 	Locked,
 	Aiming,
-	Reloading
+	Reloading,
+	OutOfAmmo
 };
 
 //forward declaration
@@ -28,9 +29,9 @@ class BATTLEGROUNDS_API UTankAimingComponent : public UActorComponent
 public:	
 	//methods
 	void AimAt(FVector HitLocation);
-	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 	UFUNCTION(BlueprintCallable, Category = Controls)
 	void Fire();
+	EFiringStatus GetFiringState() const;
 
 protected:
 	//methods
@@ -38,20 +39,25 @@ protected:
 	UFUNCTION(BlueprintCallable, Category = "Setup")
 	void Initialize(UTankBarrel* BarrelToSet, UTankTurret* TurretToSet);
 
+	UFUNCTION(BlueprintCallable, Category = "Status")
+	int GetAmmoCount();
+
 	//variables
 	UPROPERTY(BlueprintReadOnly, Category = "Status")
-	EFiringStatus FiringStatus = EFiringStatus::Aiming;
+	EFiringStatus FiringStatus = EFiringStatus::Reloading;
 		
 private:
 	//methods
 	UTankAimingComponent();
+	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 	void MoveBarrelTowards(FVector AimDirection);
+	bool IsBarrelMoving();
 
 	//object references and pointers
 	UTankBarrel* Barrel = nullptr;
 	UTankTurret* Turret = nullptr;
 	UPROPERTY(EditDefaultsOnly, Category = Setup)
-		TSubclassOf<AProjectile> ProjectileBlueprint;
+	TSubclassOf<AProjectile> ProjectileBlueprint;
 
 	//variables
 	UPROPERTY(EditDefaultsOnly, Category = "Firing")
@@ -59,5 +65,7 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category = "Firing")
 	float ReloadTimeInSeconds = 3;
 	double LastFireTime = 0;
+	FVector AimDirection = FVector::ZeroVector;
+	int AmmoCount = 3;
 
 };
