@@ -36,7 +36,6 @@ void UTankAimingComponent::TickComponent(float DeltaTime, ELevelTick TickType, F
 	{
 		FiringStatus = EFiringStatus::Locked;
 	}
-	UE_LOG(LogTemp, Warning, TEXT("Ammo count is: %i"), AmmoCount);
 }
 
 // Called when the game starts

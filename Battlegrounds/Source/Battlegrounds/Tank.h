@@ -14,4 +14,16 @@ class BATTLEGROUNDS_API ATank : public APawn
 public:	
 	ATank();	
 	virtual void BeginPlay() override;
+	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
+
+	//returns current health as a percentage of max health between 0-1
+	UFUNCTION(BlueprintPure, Category = "Health")
+	float GetHealthPercent();
+
+protected:
+	UPROPERTY(EditDefaultsOnly, Category = "Setup")
+	int32 MaxHealth = 100;
+
+	UPROPERTY(VisibleAnywhere, Category = "Health")
+	int32 CurrentHealth = MaxHealth;
 };
