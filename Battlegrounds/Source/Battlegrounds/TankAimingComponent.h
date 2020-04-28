@@ -65,7 +65,7 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category = "Firing")
 	float ReloadTimeInSeconds = 1.5;
 	UPROPERTY(EditDefaultsOnly, Category = "Firing")
-	int32 AmmoCount = 3;
+	int32 AmmoCount = 20;
 
 	double LastFireTime = 0;
 	FVector AimDirection = FVector::ZeroVector;

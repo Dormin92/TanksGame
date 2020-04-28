@@ -6,9 +6,6 @@
 #include "GameFramework/PlayerController.h"
 #include "TankPlayerController.generated.h"
 
-/**
- * 
- */
 UCLASS()
 class BATTLEGROUNDS_API ATankPlayerController : public APlayerController
 {
@@ -29,6 +26,8 @@ private:
 	UPROPERTY(EditDefaultsOnly)
 	float LineTraceRange = 1000000.0;
 
+	virtual void SetPawn(APawn* InPawn) override;
+
 	void AimTowardsCrosshair();
 
 	bool GetSightRayHitLocation(FVector& OutHitLocation) const;
@@ -36,6 +35,9 @@ private:
 	bool GetLookDirection(FVector2D& ScreenLocation, FVector& CameraPosition, FVector& OutHitLocation) const;
 
 public:
+	UFUNCTION()
+	void OnPossessedTankDeath();
+
 	virtual void Tick(float DeltaSeconds) override;
 	virtual void BeginPlay() override;
 };

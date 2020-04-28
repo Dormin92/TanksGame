@@ -6,6 +6,8 @@
 #include "GameFramework/Pawn.h"
 #include "Tank.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FTankDelegate);
+
 UCLASS()
 class BATTLEGROUNDS_API ATank : public APawn
 {
@@ -15,6 +17,7 @@ public:
 	ATank();	
 	virtual void BeginPlay() override;
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
+	FTankDelegate OnDeath;
 
 	//returns current health as a percentage of max health between 0-1
 	UFUNCTION(BlueprintPure, Category = "Health")
@@ -25,5 +28,6 @@ protected:
 	int32 MaxHealth = 100;
 
 	UPROPERTY(VisibleAnywhere, Category = "Health")
-	int32 CurrentHealth = MaxHealth;
+	int32 CurrentHealth;
+
 };

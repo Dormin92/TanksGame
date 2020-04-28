@@ -15,8 +15,12 @@ class BATTLEGROUNDS_API ATankAIController : public AAIController
 	GENERATED_BODY()
 
 private:
+	UFUNCTION()
+	void OnPossessedTankDeath();
+
 	void BeginPlay() override;
 	void Tick(float DeltaSeconds) override;
+	virtual void SetPawn(APawn* PawnToSet) override;
 
 protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Setup")

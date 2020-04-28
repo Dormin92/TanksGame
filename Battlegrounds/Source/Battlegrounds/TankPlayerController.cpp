@@ -5,6 +5,7 @@
 #include "DrawDebugHelpers.h"
 #include "TankAimingComponent.h"
 #include "Battlegrounds.h"
+#include "Tank.h"
 
 void ATankPlayerController::BeginPlay()
 {
@@ -15,12 +16,23 @@ void ATankPlayerController::BeginPlay()
 	FoundAimingComponent(AimingComponent);
 }
 
+void ATankPlayerController::SetPawn(APawn* InPawn)
+{
+	Super::SetPawn(InPawn);
+	if (InPawn)
+	{
+		auto PossessedTank = Cast<ATank>(InPawn);
+		if (!ensure(PossessedTank)) { return; }
+		PossessedTank->OnDeath.AddUniqueDynamic(this, &ATankPlayerController::OnPossessedTankDeath);
+	}
+}
+
 void ATankPlayerController::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
 
+	if (!ensure(GetPawn())) { return; }
 	AimTowardsCrosshair();
-
 }
 
 void ATankPlayerController::AimTowardsCrosshair()
@@ -58,4 +70,9 @@ bool ATankPlayerController::GetSightRayHitLocation(FVector& OutHitLocation) cons
 bool ATankPlayerController::GetLookDirection(FVector2D& ScreenLocation, FVector& CameraPosition, FVector& OutHitLocation) const
 {
 	return DeprojectScreenPositionToWorld(ScreenLocation.X, ScreenLocation.Y, CameraPosition, OutHitLocation);
+}
+
+void ATankPlayerController::OnPossessedTankDeath()
+{
+	StartSpectatingOnly();
 }

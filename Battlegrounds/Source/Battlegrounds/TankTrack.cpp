@@ -2,6 +2,7 @@
 
 
 #include "TankTrack.h"
+#include "SprungWheel.h"
 
 UTankTrack::UTankTrack()
 {

@@ -6,6 +6,8 @@
 #include "Components/StaticMeshComponent.h"
 #include "TankTrack.generated.h"
 
+class ASprungWheel;
+
 UCLASS(meta = (BlueprintSpawnableComponent))
 class BATTLEGROUNDS_API UTankTrack : public UStaticMeshComponent
 {
