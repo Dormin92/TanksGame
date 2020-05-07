@@ -16,6 +16,7 @@ class BATTLEGROUNDS_API ASprungWheel : public AActor
 public:	
 	ASprungWheel();
 	virtual void Tick(float DeltaTime) override;
+	void AddDrivingForce(float ForceMagnitude);
 
 	//Components
 	UPROPERTY(VisibleAnywhere)
@@ -33,4 +34,9 @@ protected:
 
 private:
 	void SetupConstraints();
+	void ApplyForce();
+	UFUNCTION()
+	void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
+
+	float TotalForceMagnitudeThisFrame = 0;
 };
