@@ -31,15 +31,16 @@ void ATankAIController::Tick(float DeltaSeconds)
 	auto PlayerTank = GetWorld()->GetFirstPlayerController()->GetPawn();
 	if (ensure(PlayerTank))
 	{
+		auto PlayerLocation = PlayerTank->GetActorLocation();
 		MoveToActor(PlayerTank, AcceptanceRadius);
-		AimingComponent->AimAt(PlayerTank->GetActorLocation());
+		AimingComponent->AimAt(PlayerLocation);
 		
 		if (AimingComponent->GetFiringState() == EFiringStatus::Locked)
 		{
-			AimingComponent->Fire();
+			if (AimingComponent->HaveLineOfSight(PlayerLocation, PlayerTank))
+				AimingComponent->Fire();
 		}
 	}
-	else{ UE_LOG(LogTemp, Warning, TEXT("PlayerTank NOT found")); }
 }
 
 void ATankAIController::OnPossessedTankDeath()

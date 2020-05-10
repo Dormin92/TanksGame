@@ -29,6 +29,7 @@ class BATTLEGROUNDS_API UTankAimingComponent : public UActorComponent
 public:	
 	//methods
 	void AimAt(FVector HitLocation);
+	bool HaveLineOfSight(FVector HitLocation, AActor* Player);
 	UFUNCTION(BlueprintCallable, Category = Controls)
 	void Fire();
 	EFiringStatus GetFiringState() const;

@@ -6,6 +6,7 @@
 #include "Projectile.h"
 #include "TankTurret.h"
 #include "Kismet/GameplayStatics.h"
+#include "Engine/World.h"
 
 
 // Sets default values for this component's properties
@@ -72,6 +73,21 @@ void UTankAimingComponent::AimAt(FVector HitLocation)
 	AimDirection = OutLaunchVelocity.GetSafeNormal();
 
 	MoveBarrelTowards(AimDirection);
+}
+
+bool UTankAimingComponent::HaveLineOfSight(FVector HitLocation, AActor* Player)
+{
+	auto TargetLocation = HitLocation;
+	FHitResult OutHit;
+
+	if (!ensure(Barrel)) { return false; }
+	FVector StartLocation = Barrel->GetSocketLocation(FName("FireLocation"));	
+
+	if (GetWorld()->LineTraceSingleByChannel(OutHit, StartLocation, TargetLocation, ECollisionChannel::ECC_PhysicsBody))
+	{
+		if (OutHit.GetActor() == Player) { return true; }
+	}
+	return false;
 }
 
 void UTankAimingComponent::MoveBarrelTowards(FVector AimDirection)
