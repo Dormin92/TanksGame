@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "PhysicsEngine/PhysicsConstraintComponent.h" 
+#include "Components/SphereComponent.h"
 #include "SprungWheel.generated.h"
 
 UCLASS()
@@ -15,12 +16,17 @@ class BATTLEGROUNDS_API ASprungWheel : public AActor
 public:	
 	ASprungWheel();
 	virtual void Tick(float DeltaTime) override;
+	void AddDrivingForce(float ForceMagnitude);
 
 	//Components
 	UPROPERTY(VisibleAnywhere)
-	UStaticMeshComponent* Wheel = nullptr;
+	USphereComponent* Wheel = nullptr;
 	UPROPERTY(VisibleAnywhere)
-	UPhysicsConstraintComponent* PhysicsConstraint = nullptr;
+	USphereComponent* Axle = nullptr;
+	UPROPERTY(VisibleAnywhere)
+	UPhysicsConstraintComponent* MassAxleConstraint = nullptr;
+	UPROPERTY(VisibleAnywhere)
+	UPhysicsConstraintComponent* AxleWheelConstraint = nullptr;
 
 protected:
 	// Called when the game starts or when spawned
@@ -28,4 +34,9 @@ protected:
 
 private:
 	void SetupConstraints();
+	void ApplyForce();
+	UFUNCTION()
+	void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
+
+	float TotalForceMagnitudeThisFrame = 0;
 };
