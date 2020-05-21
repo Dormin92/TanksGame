@@ -28,17 +28,21 @@ void ATankAIController::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
 	auto AimingComponent = GetPawn()->FindComponentByClass<UTankAimingComponent>();
-	auto PlayerTank = GetWorld()->GetFirstPlayerController()->GetPawn();
+	auto PlayerTank = Cast<ATank>(GetWorld()->GetFirstPlayerController()->GetPawn());
 	if (ensure(PlayerTank))
 	{
 		auto PlayerLocation = PlayerTank->GetActorLocation();
+		PlayerLocation = PlayerLocation + FVector(0.0, 0.0, 100.0);
 		MoveToActor(PlayerTank, AcceptanceRadius);
 		AimingComponent->AimAt(PlayerLocation);
-		
+		AimingComponent->HaveLineOfSight(PlayerLocation, PlayerTank);
 		if (AimingComponent->GetFiringState() == EFiringStatus::Locked)
 		{
 			if (AimingComponent->HaveLineOfSight(PlayerLocation, PlayerTank))
+			{
+				UE_LOG(LogTemp, Warning, TEXT("Player acquired"));
 				AimingComponent->Fire();
+			}
 		}
 	}
 }
