@@ -7,6 +7,7 @@
 #include "TankTurret.h"
 #include "Kismet/GameplayStatics.h"
 #include "Engine/World.h"
+#include "DrawDebugHelpers.h"
 
 
 // Sets default values for this component's properties
@@ -82,7 +83,7 @@ bool UTankAimingComponent::HaveLineOfSight(FVector HitLocation, AActor* Player)
 
 	if (!ensure(Barrel)) { return false; }
 	FVector StartLocation = Barrel->GetSocketLocation(FName("FireLocation"));	
-
+	DrawDebugLine(GetWorld(), StartLocation, TargetLocation, FColor::Red);
 	if (GetWorld()->LineTraceSingleByChannel(OutHit, StartLocation, TargetLocation, ECollisionChannel::ECC_PhysicsBody))
 	{
 		if (OutHit.GetActor() == Player) { return true; }
@@ -127,7 +128,7 @@ bool UTankAimingComponent::IsBarrelMoving()
 {
 	if (!ensure(Barrel)) { return false; }
 	auto BarrelDirection = Barrel->GetForwardVector().GetSafeNormal();
-	if (!AimDirection.Equals(BarrelDirection, 0.01))
+	if (!AimDirection.Equals(BarrelDirection, 0.1))
 	{
 		return true;
 	}
