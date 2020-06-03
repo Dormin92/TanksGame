@@ -27,9 +27,9 @@ protected:
 	UProjectileMovementComponent* ProjectileMovement = nullptr;
 	UPROPERTY(VisibleAnywhere)
 	UStaticMeshComponent* CollisionMesh = nullptr;
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(BlueprintReadOnly)
 	UParticleSystemComponent* LaunchBlast = nullptr;
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(BlueprintReadOnly)
 	UParticleSystemComponent* ImpactBlast = nullptr;
 	UPROPERTY(VisibleAnywhere)
 	URadialForceComponent* ExplosionForce = nullptr;
@@ -37,6 +37,7 @@ protected:
 	float DestroyDelay = 2.0f;
 	UPROPERTY(EditDefaultsOnly, Category = "Setup")
 	float DamageAmount = 20.0f;
+
 
 private:
 	UFUNCTION()

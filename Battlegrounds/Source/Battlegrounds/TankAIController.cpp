@@ -40,7 +40,6 @@ void ATankAIController::Tick(float DeltaSeconds)
 		{
 			if (AimingComponent->HaveLineOfSight(PlayerLocation, PlayerTank))
 			{
-				UE_LOG(LogTemp, Warning, TEXT("Player acquired"));
 				AimingComponent->Fire();
 			}
 		}
@@ -50,5 +49,7 @@ void ATankAIController::Tick(float DeltaSeconds)
 void ATankAIController::OnPossessedTankDeath()
 {
 	if (!GetPawn()) { return; }
+	ATankPlayerController* PlayerController = Cast<ATankPlayerController>(GetWorld()->GetFirstPlayerController());
+	PlayerController->DecrementEnemyCount();
 	GetPawn()->DetachFromControllerPendingDestroy();
 }

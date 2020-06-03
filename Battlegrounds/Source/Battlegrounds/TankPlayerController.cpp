@@ -2,6 +2,7 @@
 
 #include "TankPlayerController.h"
 #include "Engine/World.h"
+#include "Kismet/KismetSystemLibrary.h"
 #include "DrawDebugHelpers.h"
 #include "TankAimingComponent.h"
 #include "Battlegrounds.h"
@@ -75,4 +76,13 @@ bool ATankPlayerController::GetLookDirection(FVector2D& ScreenLocation, FVector&
 void ATankPlayerController::OnPossessedTankDeath()
 {
 	StartSpectatingOnly();
+}
+
+void ATankPlayerController::DecrementEnemyCount()
+{
+	EnemyCount--;
+	if (EnemyCount <= 0)
+	{
+		ConsoleCommand("quit");
+	}
 }

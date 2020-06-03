@@ -17,6 +17,9 @@ protected:
 	void FoundAimingComponent(UTankAimingComponent* AimCompRef);
 
 private:
+	UPROPERTY(EditAnywhere)
+	int EnemyCount = 4;
+
 	UPROPERTY(EditDefaultsOnly)
 	float CrosshairXLocation = 0.5;
 
@@ -37,6 +40,8 @@ private:
 public:
 	UFUNCTION()
 	void OnPossessedTankDeath();
+
+	void DecrementEnemyCount();
 
 	virtual void Tick(float DeltaSeconds) override;
 	virtual void BeginPlay() override;
